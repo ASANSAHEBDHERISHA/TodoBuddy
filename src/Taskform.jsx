@@ -1,83 +1,49 @@
-import React from 'react'
+import React, { useState } from 'react';
 
-import { useState } from 'react'
+export default function Taskform({ addTask }) {
+  const [task, setTask] = useState('');
+  const [priority, setPriority] = useState("Medium");
+  const [category, setCategory] = useState("General");
 
-export default function Taskform({addTask}) {
+  const handleSubmit = (e) => {
+    e.preventDefault();
 
-    const [task, setTask] = useState('');
+    if (!task.trim()) return; // prevent empty
 
-    const [priority, setPriority] = useState("Medium")
+    addTask({ text: task.trim(), priority, category, completed: false });
 
-    const [category, setCategory] = useState("General")
-
-
-
-    const handlesubmit = (e)=>{
-
-        e.preventDefault();
-
-        addTask({text:task, priority, category, completed: false})
-
-        //Reset State:
-
-        setTask(" ");
-
-        setPriority("Medium")
-
-        setCategory('General')
-
-    }
+    setTask('');
+    setPriority("Medium");
+    setCategory("General");
+  };
 
   return (
+    <form onSubmit={handleSubmit} className="task-form">
 
-    <form onSubmit={handlesubmit} className='task-form'>
+      <div id="inp">
+        <input
+          type="text"
+          placeholder="Enter task"
+          value={task}
+          onChange={(e) => setTask(e.target.value)}
+        />
+        <button type="submit">Add</button>
+      </div>
 
-        <div id="inp">
+      <div id="btns">
+        <select value={priority} onChange={(e) => setPriority(e.target.value)}>
+          <option>High</option>
+          <option>Medium</option>
+          <option>Low</option>
+        </select>
 
-            <input 
-
-            type = "text"
-
-            placeholder='Enter Your Task'
-
-            value={task}
-
-            onChange={(e)=>setTask(e.target.value)} />
-
-            <span><button type='submit'>Add Task</button></span>
-
-        </div>
-
-
-
-        <div id="btns">
-
-            <select value={priority} onChange={(e)=>setPriority(e.target.value)}>
-
-                <option value="High">High</option>
-
-                <option value="Medium">Medium</option>
-
-                <option value="Low">Low</option>
-
-            </select>
-
-
-
-            <select value={category} onChange={(e)=>setCategory(e.target.value)}>
-
-                <option value="General">General</option>
-
-                <option value="Work">Work</option>
-
-                <option value="Personal">Personal</option>
-
-            </select>
-
-        </div>
+        <select value={category} onChange={(e) => setCategory(e.target.value)}>
+          <option>General</option>
+          <option>Work</option>
+          <option>Personal</option>
+        </select>
+      </div>
 
     </form>
-
-  )
-
+  );
 }
